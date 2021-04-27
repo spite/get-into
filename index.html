@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Get into the NFT</title>
+    <meta charset="utf-8" />
+    <meta property="og:image" content="cover.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        touch-action: none;
+      }
+      body {
+        color: #ffffff;
+        font-family: tahoma;
+        font-size: 13px;
+        background-color: #222;
+        margin: 0px;
+        overflow: hidden;
+      }
+      svg {
+        width: 100vw;
+        height: 100vh;
+      }
+      #tmp {
+        display: none;
+      }
+      #stream {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg viewBox="0 0 1000 1000" style="background: white">
+      <g id="canvas" display="none"></g>
+    </svg>
+    <canvas id="tmp"></canvas>
+    <video id="stream" autoplay="autoplay"></video>
+  </body>
+  <script src="main.js" type="module"></script>
+</html>
