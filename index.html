@@ -16,10 +16,9 @@
         touch-action: none;
       }
       body {
-        color: #ffffff;
+        background-color: white;
         font-family: tahoma;
         font-size: 13px;
-        background-color: #222;
         margin: 0px;
         overflow: hidden;
       }
@@ -33,14 +32,48 @@
       #stream {
         display: none;
       }
+      #options {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1em;
+        text-align: center;
+        color: black;
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        align-items: center;
+        justify-content: center;
+      }
+      #options li {
+        padding: 0.5em 1em;
+        margin: 0 0.2em;
+        background-color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid black;
+        transition: background-color 250ms ease-out, color 250ms ease-out,
+          border-color 250ms ease-out;
+      }
+      #options li:hover {
+        border: 1px solid white;
+        background-color: black;
+        color: white;
+      }
     </style>
   </head>
   <body>
-    <svg viewBox="0 0 1000 1000" style="background: white">
+    <svg viewBox="0 0 1000 1000">
       <g id="canvas" display="none"></g>
     </svg>
     <canvas id="tmp"></canvas>
     <video id="stream" autoplay="autoplay"></video>
+    <ul id="options">
+      <li data-size="10">10</li>
+      <li data-size="20">20</li>
+      <li data-size="40">40</li>
+      <li data-size="80">80</li>
+    </ul>
   </body>
   <script src="main.js" type="module"></script>
 </html>

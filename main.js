@@ -13,19 +13,36 @@ async function getMedia(constraints) {
 
 const canvas = document.querySelector("#canvas");
 
+let size = parseInt(window.location.hash.substr(1), 10) || 20;
+
 const imgCanvas = document.querySelector("#tmp");
-imgCanvas.width = 50;
-imgCanvas.height = 50;
 const imgCtx = imgCanvas.getContext("2d");
-let stream;
 const video = document.querySelector("#stream");
+let radius = 1;
+
+function resizeCanvas() {
+  imgCanvas.width = size;
+  imgCanvas.height = size;
+  radius = 500 / imgCanvas.width;
+  canvas.setAttribute("transform", `translate(${radius} ${radius})`);
+  while (canvas.firstChild) {
+    canvas.firstChild.remove();
+  }
+  for (let y = 0; y < imgCanvas.height; y++) {
+    dots[y] = [];
+    for (let x = 0; x < imgCanvas.width; x++) {
+      const path = getSquircle();
+      doSquircle(path, 1, x, y);
+      canvas.append(path);
+      dots[y][x] = path;
+    }
+  }
+}
 
 function getSquircle() {
   const path = document.createElementNS(svgns, "path");
   return path;
 }
-
-const radius = 10;
 
 function doSquircle(path, r, x, y) {
   const d = r * radius;
@@ -41,20 +58,11 @@ function doSquircle(path, r, x, y) {
   );
   path.setAttribute(
     "transform",
-    `translate(${x * 2 * radius}, ${y * 2 * radius})`
+    `translate(${x * 2 * radius - d}, ${y * 2 * radius - d})`
   );
 }
 
 const dots = [];
-for (let y = 0; y < imgCanvas.height; y++) {
-  dots[y] = [];
-  for (let x = 0; x < imgCanvas.width; x++) {
-    const path = getSquircle();
-    doSquircle(path, 1, x, y);
-    canvas.append(path);
-    dots[y][x] = path;
-  }
-}
 
 function render() {
   imgCtx.drawImage(video, 0, 0);
@@ -83,7 +91,7 @@ function render() {
   requestAnimationFrame(render);
 }
 
-async function init() {
+async function updateStream() {
   const stream = await getMedia({
     video: { width: imgCanvas.width, height: imgCanvas.height },
   });
@@ -91,8 +99,33 @@ async function init() {
     canvas.style.display = "block";
     video.srcObject = stream;
     video.play();
-    render();
   }
 }
+
+async function init() {
+  resizeCanvas();
+  await updateStream();
+  render();
+}
+
+let theme = 0;
+window.addEventListener("click", (e) => {
+  theme = 1 - theme;
+  if (theme === 0) {
+    document.body.style.backgroundColor = "#ffffff";
+  } else {
+    document.body.style.backgroundColor = "#111111";
+  }
+});
+
+document.querySelector("#options").addEventListener("click", async (e) => {
+  size = parseInt(e.target.getAttribute("data-size"), 10);
+  canvas.style.display = "none";
+  resizeCanvas();
+  requestAnimationFrame(() => {
+    updateStream();
+  });
+  e.stopPropagation();
+});
 
 init();
